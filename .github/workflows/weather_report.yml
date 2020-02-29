@@ -15,11 +15,10 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.7.x
-    - name: Build and test with Rake
+    - name: Build
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec rake
     - name: Execute Rake task
       run: 
         bundle exec rake send_weather_report
