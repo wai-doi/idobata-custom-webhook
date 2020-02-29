@@ -1,8 +1,8 @@
-name: Ruby
+name: weather_report
 
 on:
-  watch:
-    types: [started]
+  schedule:
+    - cron: '0 * * * *' 
 
 jobs:
   build:
@@ -19,6 +19,9 @@ jobs:
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec rake send_hello_world 
+        bundle exec rake
+    - name: Execute Rake task
+      run: 
+        bundle exec rake send_weather_report
       env:
         END_POINT_URL: ${{ secrets.END_POINT_URL }}
