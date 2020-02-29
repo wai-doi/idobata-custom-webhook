@@ -19,4 +19,6 @@ jobs:
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec rake send_hello_world
+        bundle exec rake send_hello_world 
+      env:
+        END_POINT_URL: ${{ secrets.END_POINT_URL }}
