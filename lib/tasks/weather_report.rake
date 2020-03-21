@@ -2,6 +2,18 @@ require 'open-uri'
 require 'json'
 
 class WeatherReport
+  EMOJIS = {
+    '時々' => '↔︎',
+    'のち' => '→',
+    '晴れ' => ':sunny:',
+    '晴' => ':sunny:',
+    '曇り' => ':cloud:',
+    '曇' => ':cloud:',
+    '雨' => ':umbrella:',
+    '雪' => ':snowman:',
+    '雷' => ':zap:'
+  }
+
   def initialize(forecast)
     @date_label = forecast['dateLabel']
     @date = Date.parse(forecast['date'])
@@ -9,7 +21,7 @@ class WeatherReport
   end
 
   def message
-    "#{@date_label} #{date_str}の天気 #{@telop} #{emoji}"
+    "#{@date_label} #{date_str}の天気 #{@telop} #{emoji_text}"
   end
 
   private
@@ -22,19 +34,9 @@ class WeatherReport
     %w(日 月 火 水 木 金 土)[@date.wday]
   end
 
-  def emoji
-    @telop.scan(Regexp.union(*weather_emoji.keys))
-      .map { |str| weather_emoji[str] }
-      .join(' ')
-  end
-
-  def weather_emoji
-    {
-      '晴' => ':sunny:',
-      '曇' => ':cloud:',
-      '雨' => ':umbrella:',
-      '雪' => ':snowman:'
-    }
+  def emoji_text
+    keys = EMOJIS.keys.sort_by(&:length).reverse
+    @telop.gsub(Regexp.union(keys), EMOJIS)
   end
 end
 
